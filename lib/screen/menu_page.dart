@@ -1,8 +1,8 @@
+import 'package:alc_mobile_app/controller/auth_controller.dart';
+import 'package:alc_mobile_app/screen/service_request/service_request_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/link.dart';
-import '../controller/auth_controller.dart';
-import 'page.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -194,7 +194,7 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
 
     return InkWell(
       onTap: () {
-        Get.to(() => PagePage());
+        
       },
       child: Container(
         decoration: BoxDecoration(
@@ -213,7 +213,7 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
-                  end: Alignment(0.8, 0.0),
+                  end: const Alignment(0.8, 0.0),
                   colors: <Color>[color1.withOpacity(.5), color2.withOpacity(.8)],
                 ),
                 borderRadius: BorderRadius.circular(75),
@@ -266,7 +266,7 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
 
     return InkWell(
       onTap: () {
-        Get.to(() => PagePage());
+        Get.to(() => const ServiceRequestPage());
       },
       child: Container(
         decoration: BoxDecoration(
@@ -284,7 +284,7 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
-                  end: Alignment(0.8, 0.0),
+                  end: const Alignment(0.8, 0.0),
                   colors: <Color>[color1.withOpacity(.5), color2.withOpacity(.8)],
                 ),
                 borderRadius: BorderRadius.circular(75),

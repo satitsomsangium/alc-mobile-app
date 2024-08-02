@@ -1,4 +1,4 @@
-/* import 'dart:async';
+import 'dart:async';
 
 import 'package:alc_mobile_app/component/appbar.dart';
 import 'package:alc_mobile_app/component/my_alert_dialog.dart';
@@ -6,8 +6,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+// ignore: unused_import
 import 'package:path/path.dart' as path;
 
 class ServiceRequestDetailPage extends StatefulWidget {
@@ -24,13 +26,15 @@ class _ServiceRequestDetailPageState extends State<ServiceRequestDetailPage> {
   CollectionReference serviceRequestCollention =
       FirebaseFirestore.instance.collection("ServiceRequest");
   Color colorstatus = Colors.red.shade200;
-  final formatter = new DateFormat('dd/MM/yyyy hh:mm');
+  final formatter = DateFormat('dd/MM/yyyy hh:mm');
   FirebaseStorage storage = FirebaseStorage.instance;
   String casenovari = '';
   final formKey = GlobalKey<FormState>();
 
   Future<void> _makePhoneCall(String url) async {
+    // ignore: deprecated_member_use
     if (await canLaunch(url)) {
+      // ignore: deprecated_member_use
       await launch(url);
     } else {
       throw 'Could not launch $url';
@@ -46,7 +50,7 @@ class _ServiceRequestDetailPageState extends State<ServiceRequestDetailPage> {
     await serviceRequestCollention
         .doc(widget.docid)
         .update({'status': getstatus});
-    Navigator.of(context).pop();
+    Get.back();
     setState(() {});
   }
 
@@ -238,10 +242,10 @@ class _ServiceRequestDetailPageState extends State<ServiceRequestDetailPage> {
                       InkWell(
                         onTap: () {
                           issuescontroller.text = snapshot.data?["issues"];
-                          MyAlertDialog.showAlertDialogWithWidgetContent(
-                              context: context,
-                              title: 'แก้ไขรายละเอียด',
-                              contentWidget: Flexible(
+                          MyAlertDialog.showalertdialogWidgetContent(
+                              context,
+                              'แก้ไขรายละเอียด',
+                              Flexible(
                                 child: TextField(
                                   style: const TextStyle(
                                       color: Colors.white,
@@ -268,18 +272,17 @@ class _ServiceRequestDetailPageState extends State<ServiceRequestDetailPage> {
                                   controller: issuescontroller,
                                 ),
                               ),
-                              okButtonText: 'บันทึก',
-                              cancelButtonVisible: true,
-                              cancelButtonText: 'ยกเลิก',
-                              cancelCallback: () {
+                              'บันทึก',
+                              true,
+                              'ยกเลิก', () {
                             Navigator.of(context).pop();
-                          },okCallback: () async {
+                          }, () async {
                             if (issuescontroller.text != '') {
                               await serviceRequestCollention
                                   .doc(widget.docid)
                                   .update({'issues': issuescontroller.text});
                               issuescontroller.clear();
-                              Navigator.of(context).pop();
+                              Get.back();
                             }
                           });
                         },
@@ -381,7 +384,7 @@ class _ServiceRequestDetailPageState extends State<ServiceRequestDetailPage> {
                               await serviceRequestCollention
                                   .doc(widget.docid)
                                   .update({'caseNo': casenocontroller.text});
-                              Navigator.of(context).pop();
+                              Get.back();
                             }
                           });
                         },
@@ -570,26 +573,22 @@ class _ServiceRequestDetailPageState extends State<ServiceRequestDetailPage> {
                                       borderRadius: BorderRadius.circular(8.0),
                                       child: Image.network(
                                         snapshot.data?["images"][0],
-                                        errorBuilder: (BuildContext context,
-                                            Object exception,
-                                            StackTrace stackTrace) {
+                                        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                                           return const Text('Image not found');
                                         },
-                                        loadingBuilder:
-                                            (context, child, loadingProgress) {
-                                          if (loadingProgress == null)
+                                        loadingBuilder: (context, child, loadingProgress) {
+                                          if (loadingProgress == null) {
                                             return child;
-
-                                          return const Center(
-                                              child: Text('Loading...'));
+                                          }
+                                          return const Center(child: Text('Loading...'));
                                         },
                                       ),
                                     ),
                                   )
                                 : const SizedBox(),
                             snapshot.data?["images"].length > 1
-                                ? Divider()
-                                : SizedBox(),
+                                ? const Divider()
+                                : const SizedBox(),
                             snapshot.data?["images"].length > 1
                                 ? InkWell(
                                     onTap: () {
@@ -600,26 +599,23 @@ class _ServiceRequestDetailPageState extends State<ServiceRequestDetailPage> {
                                       borderRadius: BorderRadius.circular(8.0),
                                       child: Image.network(
                                         snapshot.data?["images"][1],
-                                        errorBuilder: (BuildContext context,
-                                            Object exception,
-                                            StackTrace stackTrace) {
+                                        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                                           return const Text('Image not found');
                                         },
-                                        loadingBuilder:
-                                            (context, child, loadingProgress) {
-                                          if (loadingProgress == null)
+                                        loadingBuilder: (context, child, loadingProgress) {
+                                          if (loadingProgress == null) {
                                             return child;
+                                          }
 
-                                          return const Center(
-                                              child: Text('Loading...'));
+                                          return const Center(child: Text('Loading...'));
                                         },
                                       ),
                                     ),
                                   )
                                 : const SizedBox(),
                             snapshot.data?["images"].length > 2
-                                ? Divider()
-                                : SizedBox(),
+                                ? const Divider()
+                                : const SizedBox(),
                             snapshot.data?["images"].length > 2
                                 ? InkWell(
                                     onTap: () {
@@ -630,18 +626,15 @@ class _ServiceRequestDetailPageState extends State<ServiceRequestDetailPage> {
                                       borderRadius: BorderRadius.circular(8.0),
                                       child: Image.network(
                                         snapshot.data?["images"][2],
-                                        errorBuilder: (BuildContext context,
-                                            Object exception,
-                                            StackTrace stackTrace) {
+                                        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                                           return const Text('Image not found');
                                         },
-                                        loadingBuilder:
-                                            (context, child, loadingProgress) {
-                                          if (loadingProgress == null)
+                                        loadingBuilder: (context, child, loadingProgress) {
+                                          if (loadingProgress == null) {
                                             return child;
+                                          }
 
-                                          return const Center(
-                                              child: Text('Loading...'));
+                                          return const Center(child: Text('Loading...'));
                                         },
                                       ),
                                     ),
@@ -659,4 +652,3 @@ class _ServiceRequestDetailPageState extends State<ServiceRequestDetailPage> {
     );
   }
 }
- */

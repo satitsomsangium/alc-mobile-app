@@ -31,6 +31,13 @@ class AboutPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               versionLine(
+                version: '4.0.0',
+                date: '3-AUG-2024',
+                content:
+                    '- อัปเดต sdk \n- อัปเดต Libary \n- แก้ไข ui เล็กน้อย \n- เปลี่ยนระบบ login ให้สามารถจำเครื่อง และชื่อเล่นที่เคยตั้งไว้ได้ \n- ลบการเช็คอัปเดตแอป',
+                showDivider: true,
+              ),
+              versionLine(
                 version: '3.1.0',
                 date: '25-NOV-2021',
                 content:

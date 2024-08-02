@@ -1,8 +1,11 @@
-/* import 'package:alc_mobile_app/component/appbar.dart';
+import 'package:alc_mobile_app/component/appbar.dart';
 import 'package:alc_mobile_app/component/my_alert_dialog.dart';
+import 'package:alc_mobile_app/screen/service_request/service_request_detail_page.dart';
+import 'package:alc_mobile_app/screen/service_request/service_request_input_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,7 +21,7 @@ class _ServiceRequestPageState extends State<ServiceRequestPage> {
       FirebaseFirestore.instance.collection("ServiceRequest");
   String dropdownValue = 'ทั้งหมด';
   Color colorstatus = Colors.red.shade200;
-  String firestorequery = '';
+  String? firestorequery = '';
   final ScrollController _scrollController = ScrollController();
   bool _show = true;
 
@@ -52,7 +55,9 @@ class _ServiceRequestPageState extends State<ServiceRequestPage> {
   }
 
   Future<void> _makePhoneCall(String url) async {
+    // ignore: deprecated_member_use
     if (await canLaunch(url)) {
+      // ignore: deprecated_member_use
       await launch(url);
     } else {
       throw 'Could not launch $url';
@@ -61,7 +66,7 @@ class _ServiceRequestPageState extends State<ServiceRequestPage> {
 
   Future oneditstatuspress(String docid, String getstatus) async {
     await serviceRequestCollention.doc(docid).update({'status': getstatus});
-    Navigator.of(context).pop();
+    Get.back();
     setState(() {});
   }
 
@@ -95,9 +100,9 @@ class _ServiceRequestPageState extends State<ServiceRequestPage> {
                   height: 0,
                   color: Colors.red[300],
                 ),
-                onChanged: (String newValue) {
+                onChanged: (String? newValue) {
                   setState(() {
-                    dropdownValue = newValue;
+                    dropdownValue = newValue!;
                   });
                 },
                 items: <String>[
@@ -137,10 +142,10 @@ class _ServiceRequestPageState extends State<ServiceRequestPage> {
                     child: CircularProgressIndicator(),
                   );
                 }
-                final formatter = new DateFormat('dd/MM/yyyy hh:mm');
+                final formatter = DateFormat('dd/MM/yyyy hh:mm');
                 return ListView(
                   controller: _scrollController,
-                  children: snapshot.data.docs.map((document) {
+                  children: snapshot.data!.docs.map((document) {
                     if ('${document["status"]}' == 'รอแจ้งซ่อม') {
                       colorstatus = Colors.red.shade200;
                     } else if ('${document["status"]}' == 'กำลังดำเนินการ') {
@@ -171,7 +176,7 @@ class _ServiceRequestPageState extends State<ServiceRequestPage> {
                                   ),
                                   onPressed: () {
                                     oneditstatuspress(
-                                        '${document.id}', 'แก้ไขแล้ว');
+                                        document.id, 'แก้ไขแล้ว');
                                   },
                                   child: const SizedBox(
                                     child: Center(
@@ -258,7 +263,7 @@ class _ServiceRequestPageState extends State<ServiceRequestPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    ServiceRequestDetail(document.id)));
+                                    ServiceRequestDetailPage(document.id)));
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(
@@ -308,6 +313,7 @@ class _ServiceRequestPageState extends State<ServiceRequestPage> {
                                       ),
                                     ],
                                   ),
+                                  // ignore: avoid_unnecessary_containers
                                   Container(
                                       child: Row(
                                     children: [
@@ -348,15 +354,17 @@ class _ServiceRequestPageState extends State<ServiceRequestPage> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                      margin:
-                                          const EdgeInsets.only(top: 5, bottom: 5),
-                                      padding: const EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red.withOpacity(0.04),
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: Text(document["issues"])),
+                                  Expanded(
+                                    child: Container(
+                                        margin:
+                                            const EdgeInsets.only(top: 5, bottom: 5),
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red.withOpacity(0.04),
+                                          borderRadius: BorderRadius.circular(5),
+                                        ),
+                                        child: Text(document["issues"])),
+                                  ),
                                 ],
                               ),
                               Row(
@@ -440,12 +448,13 @@ class _ServiceRequestPageState extends State<ServiceRequestPage> {
         duration: const Duration(milliseconds: 200),
         child: _show
             ? FloatingActionButton(
+                /* shape: const CircleBorder(), */
                 child: const Icon(Icons.add),
                 onPressed: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ServiceRequestInput()));
+                          builder: (context) => const ServiceRequestInputPage()));
                 },
               )
             : FloatingActionButton(
@@ -456,4 +465,3 @@ class _ServiceRequestPageState extends State<ServiceRequestPage> {
     );
   }
 }
- */

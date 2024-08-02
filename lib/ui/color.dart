@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AlcMobileColors {
   static const MaterialColor primary = MaterialColor(
-    0xffc3002f,
+    0xffff44336,
     <int, Color>{
       50: Color(0xFFF8E0E6),
       100: Color(0xFFEDB3C1),

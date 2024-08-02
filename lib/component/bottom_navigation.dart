@@ -1,8 +1,8 @@
 import 'package:alc_mobile_app/screen/account_page.dart';
 import 'package:alc_mobile_app/screen/check_price_page.dart';
 import 'package:alc_mobile_app/screen/menu_page.dart';
-import 'package:alc_mobile_app/screen/page.dart';
 import 'package:alc_mobile_app/screen/rail_card_page.dart';
+import 'package:alc_mobile_app/screen/stock_count/stock_count_page.dart';
 import 'package:flutter/material.dart';
 
 class Bottomnavigation extends StatefulWidget {
@@ -20,8 +20,8 @@ class _BottomnavigationState extends State<Bottomnavigation> {
   final List<Map<String, dynamic>> itemstabs = [
     {'icon': Icons.home_outlined, 'label': 'หน้าแรก', 'page': const MenuPage()},
     {'icon': Icons.list_alt_outlined, 'label': 'เรียลการ์ด', 'page': const RailCardPage()},
-    {'icon': Icons.inventory_2_outlined, 'label': 'นับสต๊อก', 'page': const PagePage()},
-    {'icon': Icons.price_change_outlined, 'label': 'เช็คราคา', 'page': const CheckPricePage()},
+    {'icon': Icons.inventory_2_outlined, 'label': 'นับสต๊อก', 'page': const StockCountPage()},
+    {'icon': Icons.price_change_outlined, 'label': 'เช็คราคา', 'page': const CheckPricePage() },
     {'icon': Icons.account_box_outlined, 'label': 'จัดการบัญชี', 'page': const AccountPage()},
   ];
 

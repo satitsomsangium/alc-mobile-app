@@ -14,53 +14,6 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   final AuthController authController = Get.find();
-  String offlineDBversion = '';
-  String tick = '';
-
-  /* var curday = DateTime.now();
-  var curd = DateTime.now().day;
-  var curm = DateTime.now().month;
-  var cury = DateTime.now().year; */
-
-  Widget menuCard(String title, String subtitle, dynamic leading, VoidCallback ontap) {
-    Widget leadingWidget;
-    
-    if (leading is IconData) {
-      leadingWidget = Icon(
-        leading,
-        color: Colors.red,
-        size: 55,
-      );
-    } else if (leading is Image) {
-      leadingWidget = leading;
-    } else {
-      throw ArgumentError('leading must be either IconData or Image');
-    }
-
-    return Card(
-      child: ListTile(
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.w800),
-        ),
-        subtitle: Text(subtitle),
-        leading: leadingWidget,
-        onTap: ontap,
-      ),
-    );
-  }
-
-  Future<String> getversion() async {
-    int databaseversion = /* await ManageDB().databaseversion(); */1111;
-    offlineDBversion = 'เวอร์ชัน $databaseversion';
-    return 'เวอร์ชัน $databaseversion';
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getversion();
-  }
   
   @override
   Widget build(BuildContext context) {
@@ -69,10 +22,11 @@ class _AccountPageState extends State<AccountPage> {
         title: 'จัดการบัญชี', 
         popupMenu: SizedBox.shrink(), 
         color1: Color(0xFF21E8AC),
-        color2: Color(0xFF376DF6)),
+        color2: Color(0xFF376DF6)
+      ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(7),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               menuCard(
@@ -87,11 +41,6 @@ class _AccountPageState extends State<AccountPage> {
                 Icons.change_circle_outlined, 
                 () => authController.changeNickname()
               ),
-              menuCard(
-                'อัปเดตฐานข้อมูลออฟไลน์', 
-                offlineDBversion,
-                Icons.save_alt_outlined, 
-                /* updatedatabase */() {}),
               menuCard(
                 'ALC Mobile', 
                 'แอปเวอร์ชัน ${authController.appVersion}', 
@@ -138,105 +87,54 @@ class _AccountPageState extends State<AccountPage> {
     ));
   }
 
-  /* Future<void> updatedatabase() async {
-    _showLoadingDialog('เช็คเวอร์ชัน');
-
-    int offlinedatabaseversion = await ManageDB().databaseversion();
-    final snapshot = await fb.ref().child('Stockcount').child('3').child('0').child('databaseversion').get();
-
-    if (snapshot.value != null) {
-      int databaseversion = snapshot.value;
-      if (databaseversion > offlinedatabaseversion) {
-        await Future.delayed(const Duration(seconds: 2));
-        Navigator.pop(context);
-
-        _showLoadingDialog('กรุณารอสักครู่');
-
-        print('Offline database version : $offlinedatabaseversion');
-        print('Must Update');
-        await ManageDB().deleteStore('DataMain');
-        await ManageDB().deleteStore('DataMutation');
-        await ManageDB().deleteStore('DataMainBarcode');
-        await ManageDB().getfirebase();
-        await ManageDB().getfirebaseBarcode();
-        await ManageDB().getMutationfirebase();
-        await Future.delayed(const Duration(seconds: 25));
-        Navigator.pop(context);
-        _showAlertDialog('อัปเดตฐานข้อมูลออฟไลน์', 'ฐานข้อมูลออฟไลน์เป็นเวอร์ชันล่าสุดแล้ว');
-      } else {
-        await Future.delayed(const Duration(seconds: 2));
-        Navigator.pop(context);
-        _showAlertDialog('อัปเดตฐานข้อมูลออฟไลน์', 'ฐานข้อมูลยังไม่มีเวอร์ชันใหม่');
-      }
-    }
-  } */
-
-  void _showLoadingDialog(String message) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(height: 20),
-              Text(message),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future<String> getpercentage() async {
-    /* String data = await ManageJson().updateItemlookup();
-    setState(() {
-      tick = data;
-    });
-    return data; */ return '10';
-  }
-
-  Future<void> loadtodatabase(BuildContext context) async {
-    bool running = true;
-    Stream<String> mystream() async* {
-      getpercentage();
-      while (running) {
-        yield tick;
-      }
+  Widget menuCard(String title, String subtitle, dynamic leading, VoidCallback ontap) {
+    Widget leadingWidget;
+    
+    if (leading is IconData) {
+      leadingWidget = Icon(
+        leading,
+        color: Colors.red,
+        size: 55,
+      );
+    } else if (leading is Image) {
+      leadingWidget = leading;
+    } else {
+      throw ArgumentError('leading must be either IconData or Image');
     }
 
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return StreamBuilder<String>(
-          stream: mystream(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-            return AlertDialog(
-              content: Container(
-                width: 150,
-                height: 120,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(),
-                    SizedBox(height: 20),
-                    Text(
-                      snapshot.data ?? '',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
+    return GestureDetector(
+      onTap: ontap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 3,
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 55,
+              child: leadingWidget,
+            ),
+            const SizedBox(width: 8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(fontWeight: FontWeight.w500)),
+                Text(subtitle),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

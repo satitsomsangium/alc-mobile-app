@@ -1,0 +1,52 @@
+{
+    "found": 1,
+    "hits": [
+      {
+        "document": {
+          "displayPrice": 38,
+          "id": "6814746247363",
+          "images": [
+            "https://images.mango-prod.siammakro.cloud/SOURCE/3e505156e91d419d9c3e35b1d9587f84",
+            "https://images.mango-prod.siammakro.cloud/SOURCE/be5a73b27a15420ab2223254729bf7be",
+            "https://images.mango-prod.siammakro.cloud/SOURCE/06466040db8f4e489791d3201ae5b28d"
+          ],
+          "inStock": 1,
+          "makroId": "183082",
+          "originalPrice": 38,
+          "productId": "6814746247363",
+          "seller": "Makro",
+          "sku": "oguhffrp",
+          "soldCount": 215557,
+          "title": "เนปจูน น้ําดื่ม 600 มล. x 12",
+          "titleEn": "NEPTUNE Drinking Water 600 ml x 12",
+          "unitSize": "12 unit(s)",
+          "inventoryQuantity": 1,
+          "storeCode": "30"
+        }
+      },
+
+      {
+        "document": {
+          "displayPrice": 38,
+          "id": "6814746247363",
+          "images": [
+            "https://images.mango-prod.siammakro.cloud/SOURCE/3e505156e91d419d9c3e35b1d9587f84",
+            "https://images.mango-prod.siammakro.cloud/SOURCE/be5a73b27a15420ab2223254729bf7be",
+            "https://images.mango-prod.siammakro.cloud/SOURCE/06466040db8f4e489791d3201ae5b28d"
+          ],
+          "inStock": 1,
+          "makroId": "183082",
+          "originalPrice": 38,
+          "productId": "6814746247363",
+          "seller": "Makro",
+          "sku": "oguhffrp",
+          "soldCount": 215557,
+          "title": "เนปจูน น้ําดื่ม 600 มล. x 12",
+          "titleEn": "NEPTUNE Drinking Water 600 ml x 12",
+          "unitSize": "12 unit(s)",
+          "inventoryQuantity": 1,
+          "storeCode": "30"
+        }
+      }
+    ]
+}

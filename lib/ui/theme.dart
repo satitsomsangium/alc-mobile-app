@@ -3,15 +3,15 @@ import 'package:alc_mobile_app/ui/color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-const double textHeader1Size = 28;
-const double textHeader2Size = 24;
-const double textTitle1Size = 20;
-const double textTitle2Size = 18;
-const double textBodySize = 18;
-const double textSubBodySize = 16;
-const double textCaptionSize = 14;
-const double textBadgeSize = 12;
-const double textButtonSize = 16;
+const double textHeader1Size = 26;
+const double textHeader2Size = 22;
+const double textTitle1Size = 18;
+const double textTitle2Size = 16;
+const double textBodySize = 16;
+const double textSubBodySize = 14;
+const double textCaptionSize = 12;
+const double textBadgeSize = 10;
+const double textButtonSize = 14;
 
 final ThemeData alcMobileTheme = ThemeData(
   dialogBackgroundColor: Colors.white,
@@ -55,26 +55,26 @@ final ThemeData alcMobileTheme = ThemeData(
     ),
     headlineMedium: const TextStyle().copyWith(
       fontSize: textHeader1Size.sp,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
     ),
     headlineSmall: const TextStyle().copyWith(
       fontSize: textHeader2Size.sp,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       color: AlcMobileColors.textThemeColor,
     ),
     titleLarge: const TextStyle().copyWith(
       fontSize: textTitle1Size.sp,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       color: AlcMobileColors.textThemeColor,
     ),
     titleMedium: const TextStyle().copyWith(
       fontSize: textTitle2Size.sp,
-      fontWeight: FontWeight.w600,
+      fontWeight: FontWeight.w500,
       color: AlcMobileColors.primary,
     ),
     titleSmall: const TextStyle().copyWith(
       fontSize: textBodySize.sp,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
       color: AlcMobileColors.textThemeColor,
     ),
     bodyLarge: const TextStyle().copyWith(
@@ -190,4 +190,11 @@ final ThemeData alcMobileTheme = ThemeData(
     isCollapsed: false,
     isDense: false,
   ) */
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
+    backgroundColor: AlcMobileColors.primary,
+    shape: CircleBorder(),
+  ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+    backgroundColor: Colors.white
+  )
 );

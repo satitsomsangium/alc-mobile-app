@@ -1,4 +1,4 @@
-/* import 'dart:async';
+import 'dart:async';
 import 'dart:io';
 
 import 'package:alc_mobile_app/component/appbar.dart';
@@ -30,27 +30,29 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
   String dropdownValueName = 'เลือกชื่อ';
   bool visibleDropdown2 = false;
   String serailnumber = '';
-  DateTime currentdate = new DateTime.now();
-  var curd = new DateTime.now().day;
-  var curm = new DateTime.now().month;
-  var cury = new DateTime.now().year;
-  var curh = new DateTime.now().hour;
-  var curmi = new DateTime.now().minute;
-  var curs = new DateTime.now().second;
+  DateTime currentdate = DateTime.now();
+  var curd = DateTime.now().day;
+  var curm = DateTime.now().month;
+  var cury = DateTime.now().year;
+  var curh = DateTime.now().hour;
+  var curmi = DateTime.now().minute;
+  var curs = DateTime.now().second;
   String caseno = '-';
   String workstatus = 'รอแจ้งซ่อม';
   String requestto = '';
   String phoneNo = '';
 
   //add images
+  // ignore: unused_field
   late List<XFile> _imageFileList;
 
   set _imageFile(XFile value) {
+    // ignore: unnecessary_null_comparison
     _imageFileList = (value == null ? null : [value])!;
   }
 
   dynamic _pickImageError;
-  late String _retrieveDataError;
+  late String? _retrieveDataError = '';
   final ImagePicker _picker = ImagePicker();
 
   List<XFile> myimagelist = [];
@@ -136,49 +138,48 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
 
   List<String> selectMenuItem = <String>['เลือก', ''];
 
-  /*  @override
-  void initState() {
-    super.initState();
-  
-  } */
-
   Future<bool> onWillPop() async {
-    print(myimagelist);
-    print('okkkkkkkk');
     if (dropdownValue != 'เลือกเครื่อง' ||
         dropdownValue2 != 'เลือก' ||
         dropdownValueName != 'เลือกชื่อ' ||
         issuesController.text != '' ||
+        // ignore: prefer_is_empty
         myimagelist.length > 0) {
-      MyAlertDialog.showalertdialog(context, 'ยังไม่ได้บันทึก',
-          'ต้องการละทิ้งใช่หรือไม่', 'ตกลง', true, 'ยกเลิก', () {
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
-        return true;
-      });
+      bool result = false;
+      await MyAlertDialog.showalertdialog(
+        context,
+        'ยังไม่ได้บันทึก',
+        'ต้องการละทิ้งใช่หรือไม่',
+        'ตกลง',
+        true,
+        'ยกเลิก',
+        () {
+          result = true;
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        }
+      );
+      return result;
     }
     return true;
   }
 
-  Future serailnumberfilter(String getmachinename) {
-    fb
+  Future<void> serailnumberfilter(String getmachinename) async {
+    DatabaseEvent event = await fb
         .ref()
         .child('ServiceRequest')
         .child('SerialNo')
         .child(getmachinename)
-        .once()
-        .then((DataSnapshot data) {
-      if (data.value != null) {
-        print('${data.value['serialno']}');
-        serailnumber = '${data.value['serialno']}';
-      } else {
-        serailnumber = '';
-      }
-    });
-    /*  if (getmachinename == 'เครื่องชั่ง 81') {
-      serailnumber = 'รอข้อมูล';
+        .once();
+
+    DataSnapshot dataSnapshot = event.snapshot;
+
+    if (dataSnapshot.value != null) {
+      var data = dataSnapshot.value as Map<dynamic, dynamic>;
+      serailnumber = '${data['serialno']}';
+    } else {
+      serailnumber = '';
     }
-    serailnumber = 'รอเพิ่มข้อมูล'; */
   }
 
   onsaveclick() async {
@@ -203,7 +204,6 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
         Navigator.pop(context);
       });
     } else {
-      print(serailnumber + '555555555555555555555');
       //เลือกครบทุกอย่างแล้ว
       if (dropdownValue == 'เครื่องชั่ง ' ||
           dropdownValue == 'เครื่องปริ้น Long from ' ||
@@ -253,13 +253,13 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 16 / 100,
-                  child: Text(
+                  child: const Text(
                     'Title :',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 Expanded(
-                  child: Text('${dropdownValue}${dropdownValue2}'),
+                  child: Text('$dropdownValue$dropdownValue2'),
                 ),
               ],
             ),
@@ -268,14 +268,14 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 16 / 100,
-                  child: Text(
+                  child: const Text(
                     's/n :',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 Flexible(
                   child: Text(
-                    '${getserailnumber}',
+                    getserailnumber,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -286,13 +286,13 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 16 / 100,
-                  child: Text(
+                  child: const Text(
                     'Issue :',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 Expanded(
-                  child: Text('${issuesController.text}'),
+                  child: Text(issuesController.text),
                 ),
               ],
             ),
@@ -301,7 +301,7 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 16 / 100,
-                  child: Text(
+                  child: const Text(
                     'Tel :',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -314,7 +314,7 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 16 / 100,
-                  child: Text(
+                  child: const Text(
                     'To :',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -327,7 +327,7 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 16 / 100,
-                  child: Text(
+                  child: const Text(
                     'By :',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -340,13 +340,13 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 16 / 100,
-                  child: Text(
+                  child: const Text(
                     'Img :',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 myimagelist.length < 1
-                    ? Text('ไม่มี')
+                    ? const Text('ไม่มี')
                     : Text('${myimagelist.length} รูป'),
               ],
             ),
@@ -364,8 +364,8 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
       imgurl().then((value) async {
         await serviceRequestCollention.add({
           "caseNo": "-",
-          "createDate": new DateTime.now(),
-          "createTime": '${curh}:${curmi}',
+          "createDate": DateTime.now(),
+          "createTime": '$curh:$curmi',
           "images": value,
           "issues": issuesController.text,
           "name": dropdownValueName,
@@ -373,7 +373,7 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
           "serailNo": serailnumber,
           "status": "รอแจ้งซ่อม",
           "tel": phoneNo,
-          "title": '${dropdownValue}${dropdownValue2}',
+          "title": '$dropdownValue$dropdownValue2',
           "to": requestto
         });
         Navigator.pop(context);
@@ -394,6 +394,7 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
 
   Future<List<String>> imgurl() async {
     List<String> files = [];
+    // ignore: prefer_is_empty
     if (myimagelist.length > 0) {
       for (int i = 0; i < myimagelist.length; i++) {
         final String fileName = path.basename(myimagelist[i].path);
@@ -418,11 +419,11 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
   }
 
   Widget _previewImages(double vw, double vh) {
-    final Text retrieveError = _getRetrieveErrorWidget();
+    final Text? retrieveError = _getRetrieveErrorWidget();
     if (retrieveError != null) {
       return retrieveError;
     }
-    if (myimagelist.length > 0) {
+    if (myimagelist.isNotEmpty) {
       return SizedBox(
         height: vh,
         child: ListView.builder(
@@ -440,7 +441,7 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
                               context, File(myimagelist[index].path));
                         },
                         child: Container(
-                          margin: EdgeInsets.only(right: 5),
+                          margin: const EdgeInsets.only(right: 5),
                           height: vh,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8.0),
@@ -454,18 +455,21 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
                         top: 4,
                         right: 8,
                         child: Container(
+                          width: 24,
+                          height: 24,
                           decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.7),
                             borderRadius: BorderRadius.circular(75),
                           ),
+                          padding: EdgeInsets.zero,
                           child: IconButton(
                             padding: EdgeInsets.zero,
-                            constraints: BoxConstraints(),
+                            constraints: const BoxConstraints(),
                             onPressed: () async {
-                              await myimagelist.removeAt(index);
+                              myimagelist.removeAt(index);
                               setState(() {});
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.close,
                               size: 15,
                               color: Colors.red,
@@ -484,7 +488,7 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
         textAlign: TextAlign.center,
       );
     } else {
-      return Text('');
+      return const Text('');
     }
   }
 
@@ -541,13 +545,14 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
                     icon: const Icon(Icons.arrow_drop_down),
                     iconSize: 20,
                     elevation: 8,
+                    dropdownColor: Colors.white,
                     underline: Container(
                       height: 0,
                       color: Colors.red[300],
                     ),
-                    onChanged: (String newValue) {
+                    onChanged: (String? newValue) {
                       setState(() {
-                        dropdownValue = newValue;
+                        dropdownValue = newValue!;
                         dropdownValue2 = 'เลือก';
                       });
                     },
@@ -638,13 +643,14 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
                       icon: const Icon(Icons.arrow_drop_down),
                       iconSize: 20,
                       elevation: 8,
+                      dropdownColor: Colors.white,
                       underline: Container(
                         height: 0,
                         color: Colors.red[300],
                       ),
-                      onChanged: (String newValue) async {
+                      onChanged: (String? newValue) async {
                         setState(() {
-                          dropdownValue2 = newValue;
+                          dropdownValue2 = newValue!;
                         });
                         await serailnumberfilter(
                             '$dropdownValue$dropdownValue2');
@@ -681,13 +687,14 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
                     icon: const Icon(Icons.arrow_drop_down),
                     iconSize: 20,
                     elevation: 8,
+                    dropdownColor: Colors.white,
                     underline: Container(
                       height: 0,
                       color: Colors.red[300],
                     ),
-                    onChanged: (String newValue) {
+                    onChanged: (String? newValue) {
                       setState(() {
-                        dropdownValueName = newValue;
+                        dropdownValueName = newValue!;
                       });
                     },
                     items: <String>[
@@ -711,79 +718,28 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
                 ),
               ),
               //อาการเสีย
+              const Padding(
+                padding: EdgeInsets.fromLTRB(15, 20, 15, 0),
+                child: Row(
+                  children: [
+                    Text(
+                      'รายละเอียดของปัญหา',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                 child: TextField(
                   maxLines: 10,
-                  style: const TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w700),
+                  style: const TextStyle(color: Colors.white),
                   textAlign: TextAlign.start,
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                    prefixIcon: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.red.withOpacity(0.9),
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            bottomLeft: Radius.circular(10)),
-                      ),
-                      margin: const EdgeInsets.only(right: 10),
-                      height: 210,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              if (myimagelist.length < 3) {
-                                onaddclick();
-                              } else {
-                                MyAlertDialog.showalertdialog(
-                                    context,
-                                    'เพิ่มครบจำนวนสูงสุดแล้ว',
-                                    'เพิ่มได้ 3 รูป เท่านั้น',
-                                    'ตกลง',
-                                    false,
-                                    '', () {
-                                  Navigator.of(context).pop();
-                                });
-                              }
-                            },
-                            icon: const Icon(
-                              Icons.add_photo_alternate,
-                              color: Colors.white,
-                              size: 32,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              if (myimagelist.length < 3) {
-                                oncameraclick();
-                              } else {
-                                MyAlertDialog.showalertdialog(
-                                    context,
-                                    'เพิ่มครบจำนวนสูงสุดแล้ว',
-                                    'เพิ่มได้ 3 รูป เท่านั้น',
-                                    'ตกลง',
-                                    false,
-                                    '', () {
-                                  Navigator.of(context).pop();
-                                });
-                              }
-                            },
-                            icon: Transform(
-                              alignment: Alignment.center,
-                              transform: Matrix4.rotationY(math.pi),
-                              child: const Icon(
-                                Icons.add_a_photo,
-                                color: Colors.white,
-                                size: 28,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                     contentPadding: const EdgeInsets.all(8),
                     isDense: true,
                     counterText: "",
@@ -795,9 +751,78 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
                     fillColor: Colors.grey[800],
                     hintText: "อาการเสีย",
                     hintStyle: const TextStyle(
-                        fontWeight: FontWeight.w700, color: Colors.white60),
+                        fontWeight: FontWeight.w500, color: Colors.white60),
                   ),
                   controller: issuesController,
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(15, 10, 15, 0),
+                child: Row(
+                  children: [
+                    Text(
+                      'เพิ่มรูป',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        if (myimagelist.length < 3) {
+                          onaddclick();
+                        } else {
+                          MyAlertDialog.showalertdialog(
+                              context,
+                              'เพิ่มครบจำนวนสูงสุดแล้ว',
+                              'เพิ่มได้ 3 รูป เท่านั้น',
+                              'ตกลง',
+                              false,
+                              '', () {
+                            Navigator.of(context).pop();
+                          });
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.add_photo_alternate,
+                        color: Colors.red,
+                        size: 32,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        if (myimagelist.length < 3) {
+                          oncameraclick();
+                        } else {
+                          MyAlertDialog.showalertdialog(
+                              context,
+                              'เพิ่มครบจำนวนสูงสุดแล้ว',
+                              'เพิ่มได้ 3 รูป เท่านั้น',
+                              'ตกลง',
+                              false,
+                              '', () {
+                            Navigator.of(context).pop();
+                          });
+                        }
+                      },
+                      icon: Transform(
+                        alignment: Alignment.center,
+                        transform: Matrix4.rotationY(math.pi),
+                        child: const Icon(
+                          Icons.add_a_photo,
+                          color: Colors.red,
+                          size: 28,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const Padding(
@@ -839,6 +864,7 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
                   },
                 ),
               ),
+              const SizedBox(height: 15)
             ],
           ),
         ),
@@ -850,9 +876,9 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
     );
   }
 
-  Text _getRetrieveErrorWidget() {
+  Text? _getRetrieveErrorWidget() {
     if (_retrieveDataError != null) {
-      final Text result = Text(_retrieveDataError);
+      final Text result = Text(_retrieveDataError!);
       _retrieveDataError = null;
       return result;
     }
@@ -940,4 +966,3 @@ class _ServiceRequestInputPageState extends State<ServiceRequestInputPage> {
     );
   }
 }
- */
