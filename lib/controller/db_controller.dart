@@ -236,6 +236,7 @@ class DbController extends GetxController {
         await store.add(db, bay.toMap());
       }
     }
+    await countAisleBayInit();
   }
 
   static Future<void> clearBayDataList(String aisle, String bay, String div) async {

@@ -4,6 +4,7 @@ import 'package:alc_mobile_app/controller/firebase_controller.dart';
 import 'package:alc_mobile_app/model/check_price_model.dart';
 import 'package:alc_mobile_app/model/makro_product_detail_model.dart';
 import 'package:alc_mobile_app/model/product_data_model.dart';
+import 'package:alc_mobile_app/service/app_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as get_x;
@@ -40,62 +41,54 @@ class ApiController extends get_x.GetxController {
   static Future<void> checkPriceWithImages(String article) async {
     Product? firebaseProduct = await FirebaseController.getProduct(article);
     if (firebaseProduct != null) {
-      print('${firebaseProduct.art} ${firebaseProduct.dscr}');
-      Map<String, dynamic> payload = {
-        "q": firebaseProduct.art,
-        "size": 20,
-        "filters": {
-          "isMakroPro": false,
-          "isInStore": true,
-          "storeCodes": [
-            "30"
-          ],
-          "isSalesCustomer": false,
-          "allowAlcohol": true
-        },
-        "sortBy": "RELEVANCE",
-        "autocorrect": true,
-        "page": 1,
-        "autocategorise": true,
-        "source": "app"
-      };
-      var response = await _post(
-        '', 
-        payload,
-        headers: {}
-      );
-      
-      List<dynamic> hits = response;
-
-      List<MakroProductDetail> products = hits.map((hit) {
-      Map<String, dynamic> document = hit['document'];
-        return MakroProductDetail.fromJson(document);
-      }).toList();
-
-      print('products len = ${products.length}');
-
-      for (var product in products) {
-        print(product.title);
-        print(product.sku);
-        print(product.makroId);
-        /* print(product.displayPrice); */
-        print(product.images[0]);
-
-        if (firebaseProduct.art == product.makroId 
-        || firebaseProduct.dscr == product.title) {
-          print('เช้า match');
-          print(product.title);
-          print(product.sku);
-          print(product.makroId);
-          /* print(product.displayPrice); */
-          print(product.images[0]);
-          productWithImage.value = CheckPriceResponse(
-            art: firebaseProduct.art.toString(), 
-            dscr: firebaseProduct.dscr, 
-            price: firebaseProduct.price, 
-            image: product.images
-          );
+      if (AppService.isShowProductImage.value) {
+        Map<String, dynamic> payload = {
+          "q": firebaseProduct.art,
+          "size": 20,
+          "filters": {
+            "isMakroPro": false,
+            "isInStore": true,
+            "storeCodes": [
+              "30"
+            ],
+            "isSalesCustomer": false,
+            "allowAlcohol": true
+          },
+          "sortBy": "RELEVANCE",
+          "autocorrect": true,
+          "page": 1,
+          "autocategorise": true,
+          "source": "app"
+        };
+        var response = await _post(
+          '', 
+          payload,
+          headers: {}
+        );
+        
+        List<dynamic> hits = response;
+        List<MakroProductDetail> products = hits.map((hit) {
+        Map<String, dynamic> document = hit['document'];
+          return MakroProductDetail.fromJson(document);
+        }).toList();
+        for (var product in products) {
+          if (firebaseProduct.art == product.makroId 
+          || firebaseProduct.dscr == product.title) {
+            productWithImage.value = CheckPriceResponse(
+              art: firebaseProduct.art.toString(), 
+              dscr: firebaseProduct.dscr, 
+              price: firebaseProduct.price, 
+              image: product.images
+            );
+          }
         }
+      } else {
+        productWithImage.value = CheckPriceResponse(
+          art: firebaseProduct.art.toString(), 
+          dscr: firebaseProduct.dscr, 
+          price: firebaseProduct.price,  
+          image: []
+        );
       }
     } else {
       productWithImage.value = CheckPriceResponse(

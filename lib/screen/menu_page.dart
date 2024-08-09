@@ -1,5 +1,10 @@
+import 'package:alc_mobile_app/component/bottom_navigation.dart';
+import 'package:alc_mobile_app/component/button.dart';
 import 'package:alc_mobile_app/controller/auth_controller.dart';
+import 'package:alc_mobile_app/controller/signage_controller.dart';
 import 'package:alc_mobile_app/screen/service_request/service_request_page.dart';
+import 'package:alc_mobile_app/screen/signage_print_transaction_page.dart';
+import 'package:alc_mobile_app/screen/signage_transaction_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/link.dart';
@@ -11,182 +16,155 @@ class MenuPage extends StatefulWidget {
   State<MenuPage> createState() => _MenuPageState();
 }
 
-class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin {
-  late Animation<double> animation;
-  late AnimationController animationController;
-
+class _MenuPageState extends State<MenuPage> {
   final AuthController authController = Get.find();
-
-  @override
-  void initState() {
-    super.initState();
-    animationController = AnimationController(
-      duration: const Duration(milliseconds: 400),
-      vsync: this,
-    );
-    animation = Tween(begin: -1.0, end: 0.0).animate(
-      CurvedAnimation(parent: animationController, curve: Curves.fastOutSlowIn),
-    );
-    animationController.forward();
-  }
-
-  @override
-  void dispose() {
-    animationController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final firebaseUser = authController.user.value;
     return SafeArea(
-      child: FadeTransition(
-        opacity: animationController.drive(CurveTween(curve: Curves.easeOut)),
-        child: Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                /* Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const Spacer(),
+                  iconHome(
+                    icon: Icons.list_alt_outlined,
+                    title: 'ขอเรียลการ์ด',
+                    index: 1,
+                    /* color1: const Color(0xFFFF416C),
+                    color2: const Color(0xFF8A52E9), */
+                  ),
+                  const Spacer(),
+                  iconHome(
+                    icon: Icons.inventory_2_outlined,
+                    title: 'นับสต๊อกออฟไลน์',
+                    index: 2,
+                    /* color1: const Color(0xFFFFA72F),
+                    color2: const Color(0xFFFF641A), */
+                  ),
+                  const Spacer(),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const Spacer(),
+                  iconHome(
+                    icon: Icons.price_change_outlined,
+                    title: 'เช็คราคาสินค้า',
+                    index: 3,
+                    /* color1: const Color(0xFFFF7765),
+                    color2: const Color(0xFFF7A23C), */
+                  ),
+                  const Spacer(),
+                  iconHome(
+                    icon: Icons.account_box_outlined,
+                    title: 'จัดการบัญชี',
+                    index: 4,
+                    /* color1: const Color(0xFF21E8AC),
+                    color2: const Color(0xFF376DF6), */
+                  ),
+                  const Spacer(),
+                ],
+              ),
+              AlcMobileButton(text: 'text', onPressed: () {
+                Get.to(SignagePrintTransactionPage());
+              }),
+              if (firebaseUser != null &&
+                  firebaseUser.email != null &&
+                  firebaseUser.email!.contains('alc'))
+                const Divider(),
+              if (firebaseUser != null &&
+                  firebaseUser.email != null &&
+                  firebaseUser.email!.contains('alc'))
+                Row(
                   children: [
                     const Spacer(),
-                    iconHome(
+                    iconHomeHor(
                       context,
-                      icon: Icons.list_alt_outlined,
-                      title: 'ขอเรียลการ์ด',
+                      icon: Icons.construction,
+                      title: 'ALC Service Request',
                       index: 1,
                       color1: const Color(0xFFFF416C),
-                      color2: const Color(0xFF8A52E9),
-                    ),
-                    const Spacer(),
-                    iconHome(
-                      context,
-                      icon: Icons.inventory_2_outlined,
-                      title: 'นับสต๊อกออฟไลน์',
-                      index: 2,
-                      color1: const Color(0xFFFFA72F),
-                      color2: const Color(0xFFFF641A),
+                      color2: Colors.red,
                     ),
                     const Spacer(),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    const Spacer(),
-                    iconHome(
-                      context,
-                      icon: Icons.price_change_outlined,
-                      title: 'เช็คราคาสินค้า',
-                      index: 3,
-                      color1: const Color(0xFFFF7765),
-                      color2: const Color(0xFFF7A23C),
-                    ),
-                    const Spacer(),
-                    iconHome(
-                      context,
-                      icon: Icons.account_box_outlined,
-                      title: 'จัดการบัญชี',
-                      index: 4,
-                      color1: const Color(0xFF21E8AC),
-                      color2: const Color(0xFF376DF6),
-                    ),
-                    const Spacer(),
-                  ],
-                ), */
-                if (firebaseUser != null &&
-                    firebaseUser.email != null &&
-                    firebaseUser.email!.contains('alc'))
-                  const Divider(),
-                if (firebaseUser != null &&
-                    firebaseUser.email != null &&
-                    firebaseUser.email!.contains('alc'))
-                  Row(
-                    children: [
-                      const Spacer(),
-                      iconHomeHor(
+              const Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const Spacer(),
+                  Link(
+                    uri: Uri.parse('https://lmsrv.siammakro.co.th/'),
+                    target: LinkTarget.blank,
+                    builder: (ctx, openLink) {
+                      return iconHomeMakro(
                         context,
-                        icon: Icons.construction,
-                        title: 'ALC Service Request',
-                        index: 1,
-                        color1: const Color(0xFFFF416C),
-                        color2: Colors.red,
-                      ),
-                      const Spacer(),
-                    ],
+                        images: Image.asset('assets/images/mlearning1.png'),
+                        title: 'M Learning',
+                        onPress: openLink!,
+                      );
+                    },
                   ),
-                const Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    const Spacer(),
-                    Link(
-                      uri: Uri.parse('https://lmsrv.siammakro.co.th/'),
-                      target: LinkTarget.blank,
-                      builder: (ctx, openLink) {
-                        return iconHomeMakro(
-                          context,
-                          images: Image.asset('assets/images/mlearning1.png'),
-                          title: 'M Learning',
-                          onPress: openLink!,
-                        );
-                      },
-                    ),
-                    const Spacer(),
-                    Link(
-                      uri: Uri.parse('https://ss.siammakro.co.th/'),
-                      target: LinkTarget.blank,
-                      builder: (ctx, openLink) {
-                        return iconHomeMakro(
-                          context,
-                          images: Image.asset('assets/images/Hris1.png'),
-                          title: 'HR Self Services',
-                          onPress: openLink!,
-                        );
-                      },
-                    ),
-                    const Spacer(),
-                  ],
-                ),
-                /* Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    const Spacer(),
-                    Link(
-                      uri: Uri.parse('https://board.talentmind.ai/siam-makro'),
-                      target: LinkTarget.blank,
-                      builder: (ctx, openLink) {
-                        return iconHomeMakro(
-                          context,
-                          images: Image.asset('assets/images/job.png'),
-                          title: 'สมัครงานภายใน',
-                          onPress: openLink!,
-                        );
-                      },
-                    ),
-                    const Spacer(),
-                    SizedBox(
-                      width: (MediaQuery.of(context).size.width * 50 / 100) - 20,
-                    ),
-                    const Spacer(),
-                  ],
-                ), */
-              ],
-            ),
+                  const Spacer(),
+                  Link(
+                    uri: Uri.parse('https://ss.siammakro.co.th/'),
+                    target: LinkTarget.blank,
+                    builder: (ctx, openLink) {
+                      return iconHomeMakro(
+                        context,
+                        images: Image.asset('assets/images/Hris1.png'),
+                        title: 'HR Self Services',
+                        onPress: openLink!,
+                      );
+                    },
+                  ),
+                  const Spacer(),
+                ],
+              ),
+              /* Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const Spacer(),
+                  Link(
+                    uri: Uri.parse('https://board.talentmind.ai/siam-makro'),
+                    target: LinkTarget.blank,
+                    builder: (ctx, openLink) {
+                      return iconHomeMakro(
+                        context,
+                        images: Image.asset('assets/images/job.png'),
+                        title: 'สมัครงานภายใน',
+                        onPress: openLink!,
+                      );
+                    },
+                  ),
+                  const Spacer(),
+                  SizedBox(
+                    width: (MediaQuery.of(context).size.width * 50 / 100) - 20,
+                  ),
+                  const Spacer(),
+                ],
+              ), */
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget iconHome(
-    BuildContext context, {
+  Widget iconHome({
     required IconData icon,
     required String title,
-    required int index,
-    required Color color1,
-    required Color color2,
+    int index = 0,
+    /* required Color color1,
+    required Color color2, */
   }) {
     double screenWidth(double width) {
       return MediaQuery.of(context).size.width * width / 100;
@@ -194,7 +172,7 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
 
     return InkWell(
       onTap: () {
-        
+        Navigator.pushReplacement(Get.context!, MaterialPageRoute(builder: (context) => Bottomnavigation(index)));
       },
       child: Container(
         decoration: BoxDecoration(
@@ -211,26 +189,13 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
             Container(
               padding: EdgeInsets.all(screenWidth(3)),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: const Alignment(0.8, 0.0),
-                  colors: <Color>[color1.withOpacity(.5), color2.withOpacity(.8)],
-                ),
                 borderRadius: BorderRadius.circular(75),
               ),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: screenWidth(15.8),
-                  minHeight: screenWidth(15.8),
-                  maxWidth: screenWidth(18),
-                  maxHeight: screenWidth(18),
-                ),
-                child: ClipRRect(
-                  child: Icon(
-                    icon,
-                    size: screenWidth(12),
-                    color: const Color(0xFFFCFCFC),
-                  ),
+              child: ClipRRect(
+                child: Icon(
+                  icon,
+                  size: screenWidth(15),
+                  color: Colors.red,
                 ),
               ),
             ),
@@ -282,26 +247,18 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
             Container(
               padding: EdgeInsets.all(screenWidth(3)),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
+                /* gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: const Alignment(0.8, 0.0),
                   colors: <Color>[color1.withOpacity(.5), color2.withOpacity(.8)],
-                ),
+                ), */
                 borderRadius: BorderRadius.circular(75),
               ),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: screenWidth(15.8),
-                  minHeight: screenWidth(15.8),
-                  maxWidth: screenWidth(18),
-                  maxHeight: screenWidth(18),
-                ),
-                child: ClipRRect(
-                  child: Icon(
-                    icon,
-                    size: screenWidth(12),
-                                        color: const Color(0xFFFCFCFC),
-                  ),
+              child: ClipRRect(
+                child: Icon(
+                  icon,
+                  size: screenWidth(15),
+                  color: Colors.red,
                 ),
               ),
             ),

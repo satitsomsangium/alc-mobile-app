@@ -26,21 +26,23 @@ class _StockCountPageState extends State<StockCountPage> {
         color1: Color(0xFFFFA72F),
         color2: Color(0xFFFF641A)
       ),
-      body: Obx(() {
-        CountAisleBay aisleBayData = DbController.countAisleBay.value;
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            setAisleBay(),
-            productDataStatus(),
-            customListtile('FV', 'แผนกผักและผลไม้', aisleBayData.fvAisle, aisleBayData.fvBay),
-            customListtile('BU', 'แผนกหมู เนื้อ ไก่', aisleBayData.buAisle, aisleBayData.buBay),
-            customListtile('FI', 'แผนกปลา', aisleBayData.fiAisle, aisleBayData.fiBay),
-            customListtile('BK', 'แผนกเบเกอรี่', aisleBayData.bkAisle, aisleBayData.bkBay),
-            customListtile('FZ', 'แผนกอาหารแช่แข็ง', aisleBayData.fzAisle, aisleBayData.fzBay),
-          ],
-        );
-      }),
+      body: SingleChildScrollView(
+        child: Obx(() {
+          CountAisleBay aisleBayData = DbController.countAisleBay.value;
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              setAisleBay(),
+              productDataStatus(),
+              customListtile('FV', 'แผนกผักและผลไม้', aisleBayData.fvAisle, aisleBayData.fvBay),
+              customListtile('BU', 'แผนกหมู เนื้อ ไก่', aisleBayData.buAisle, aisleBayData.buBay),
+              customListtile('FI', 'แผนกปลา', aisleBayData.fiAisle, aisleBayData.fiBay),
+              customListtile('BK', 'แผนกเบเกอรี่', aisleBayData.bkAisle, aisleBayData.bkBay),
+              customListtile('FZ', 'แผนกอาหารแช่แข็ง', aisleBayData.fzAisle, aisleBayData.fzBay),
+            ],
+          );
+        }),
+      ),
     );
   }
 
@@ -59,7 +61,7 @@ class _StockCountPageState extends State<StockCountPage> {
             }, 
             text: 'กำหนด Aisle - Bay'
           ),
-          ElevatedButton(
+          AlcMobileButton(
             onPressed: () {
               MyAlertDialog.showDefaultDialog(
                 title: 'ลบข้อมูลการนับ',
@@ -74,9 +76,9 @@ class _StockCountPageState extends State<StockCountPage> {
                 }, 
               );
             },
-            child: const Text('ลบข้อมูลการนับ')
+            text: 'ลบข้อมูลการนับ'
           ),
-          ElevatedButton(
+          AlcMobileButton(
             onPressed: () {
               MyAlertDialog.showDefaultDialog(
                 title: 'รีเช็ตฐานข้อมูล',
@@ -93,7 +95,7 @@ class _StockCountPageState extends State<StockCountPage> {
                 }, 
               );
             },
-            child: const Text('รีเช็ตฐานข้อมูล')
+            text: 'รีเช็ตฐานข้อมูล'
           ),
           AlcMobileButton(
             text: 'ดาวน์โหลดข้อมูล', 

@@ -1,3 +1,4 @@
+import 'package:alc_mobile_app/component/button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -34,59 +35,20 @@ class MyAlertDialog {
               children: [
                 Visibility(
                   visible: cancelbtstate,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        shape:
-                            WidgetStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(75),
-                                    side: const BorderSide(color: Colors.red)))),
+                  child: AlcMobileButton(
+                    text: cancelbtTXT,
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: SizedBox(
-                      width: 60,
-                      child: Center(
-                        child: Text(
-                          cancelbtTXT,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  )
                 ),
                 const SizedBox(
                   width: 10,
                 ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(75),
-                              side: const BorderSide(color: Colors.red)))),
+                AlcMobileButton(
+                  text: okbtTXT,
                   onPressed: okfunction,
-                  child: SizedBox(
-                    width: 60,
-                    child: Center(
-                      child: Text(
-                        okbtTXT,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                )
               ],
             )
           ],
@@ -163,32 +125,12 @@ class MyAlertDialog {
                         height: 20,
                       ),
                       Center(
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              shape: WidgetStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(75),
-                                      side: const BorderSide(color: Colors.red)))),
+                        child: AlcMobileButton(
+                          text: 'ตกลง',
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: const SizedBox(
-                            width: 60,
-                            child: Center(
-                              child: Text(
-                                'ตกลง',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                        )
                       ),
                     ],
                   ),
@@ -237,57 +179,18 @@ class MyAlertDialog {
               children: [
                 Visibility(
                   visible: cancelbtstate,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        shape:
-                            WidgetStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(75),
-                                    side: BorderSide(color: Colors.red)))),
+                  child: AlcMobileButton(
+                    text: cancelbtTXT,
                     onPressed: cancelfunction,
-                    child: SizedBox(
-                      width: 60,
-                      child: Center(
-                        child: Text(
-                          cancelbtTXT,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  )
                 ),
                 const SizedBox(
                   width: 10,
                 ),
-                ElevatedButton(
-                  style: ButtonStyle(
-                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(75),
-                              side: const BorderSide(color: Colors.red)))),
+                AlcMobileButton(
+                  text: okbtTXT,
                   onPressed: okfunction,
-                  child: SizedBox(
-                    width: 60,
-                    child: Center(
-                      child: Text(
-                        okbtTXT,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                )
               ],
             )
           ],
@@ -330,14 +233,18 @@ class MyAlertDialog {
   static void showDefaultDialog({
     String? title,
     String? content,
+    Widget? contentWidget,
     String? textYes,
     String? textNo,
     bool isNoButton = false,
+    bool isYesButton = true,
     VoidCallback? onPressYes,
     VoidCallback? onPressNo,
     VoidCallback? onLongPressYes,
+    bool barrierDismissible = true,
   }) {
     showDialog(
+      barrierDismissible: barrierDismissible,
       context: Get.context!,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -350,7 +257,7 @@ class MyAlertDialog {
                   color: Colors.red),
             ),
           ),
-          content: Text(
+          content: contentWidget ?? Text(
             content ?? 'เกิดข้อผิดพลาด',
             textAlign: TextAlign.center,
           ),
@@ -361,21 +268,17 @@ class MyAlertDialog {
                 children: [
                   Visibility(
                     visible: isNoButton,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        elevation: WidgetStateProperty.all(1)
-                      ),
+                    child: AlcMobileButton(
+                      text: textNo ?? 'ยกเลิก',
                       onPressed: onPressNo ?? () => Get.back(), 
-                      child: Text(textNo ?? 'ยกเลิก')
-                    ),
+                    )
                   ),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      elevation: WidgetStateProperty.all(1)
+                  Visibility(
+                    visible: isYesButton,
+                    child: AlcMobileButton(
+                      text: textYes ?? 'ตกลง',
+                      onPressed: onPressYes ?? () => Get.back(), 
                     ),
-                    onLongPress: onLongPressYes ?? () {},
-                    onPressed: onPressYes ?? () => Get.back(), 
-                    child: Text(textYes ?? 'ตกลง')
                   ),
                 ],
               ),

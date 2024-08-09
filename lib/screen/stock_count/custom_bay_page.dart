@@ -1,3 +1,4 @@
+import 'package:alc_mobile_app/component/button.dart';
 import 'package:alc_mobile_app/component/my_alert_dialog.dart';
 import 'package:alc_mobile_app/controller/db_controller.dart';
 import 'package:alc_mobile_app/model/bay_model.dart';
@@ -141,7 +142,8 @@ class _CustomBayPageState extends State<CustomBayPage> {
   Widget buttonRow() {
     return Row(
       children: [
-        ElevatedButton(
+        AlcMobileButton(
+          text: 'เซ็ตเบย์ตามค่าเริ่มต้น',
           onPressed: () {
             MyAlertDialog.showDefaultDialog(
               title: 'เซ็ตเบย์ตามค่าเริ่มต้น',
@@ -155,11 +157,11 @@ class _CustomBayPageState extends State<CustomBayPage> {
                 Get.context!.loaderOverlay.hide();
               }
             );
-          }, 
-          child: const Text('เซ็ตเบย์ตามค่าเริ่มต้น')
+          },
         ),
         const SizedBox(width: 8),
-        ElevatedButton(
+        AlcMobileButton(
+          text: 'ลบเบย์ทั้งหมด',
           onPressed: () {
             MyAlertDialog.showDefaultDialog(
               title: 'ลบเบย์ทั้งหมด',
@@ -174,9 +176,8 @@ class _CustomBayPageState extends State<CustomBayPage> {
                 Get.context!.loaderOverlay.hide();
               }
             );
-          }, 
-          child: const Text('ลบเบย์ทั้งหมด')
-        )
+          },
+        ),
       ],
     );
   }
@@ -316,16 +317,9 @@ class _CustomBayPageState extends State<CustomBayPage> {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(
+          child: AlcMobileButton(
             onPressed: onSavePress,
-            child: const Text(
-              'บันทึก',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
+            text: 'บันทึก',
           ),
         ),
       ],

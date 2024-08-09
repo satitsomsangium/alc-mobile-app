@@ -141,60 +141,16 @@ final ThemeData alcMobileTheme = ThemeData(
     primary: AlcMobileColors.primary,
     surface: AlcMobileColors.backgroundColor,
   ),
-  /* inputDecorationTheme: InputDecorationTheme(
-    prefixIconColor: AlcMobileColors.inputIconColor,
-    suffixIconColor: AlcMobileColors.inputIconColor,
-    iconColor: AlcMobileColors.inputIconColor,
-    hintStyle: TextStyle(fontSize: textBodySize.sp, color: Colors.black38),
-    errorStyle: TextStyle(fontSize: textSubBodySize.sp, color: AlcMobileColors.redAlert, overflow: TextOverflow.clip),
-    alignLabelWithHint: false,
-    errorMaxLines: 3,
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.0),
-      borderSide: const BorderSide(
-        color: AlcMobileColors.inputBorderColor,
-        width: 1, 
-      ),
-    ),
-    disabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.0),
-      borderSide: const BorderSide(
-        color: AlcMobileColors.lightGray,
-        width: 1,
-      ),
-    ),
-    errorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.0),
-      borderSide: const BorderSide(
-        color: AlcMobileColors.redAlert,
-        width: 1, 
-      ),
-    ),
-    focusedErrorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.0),
-      borderSide: const BorderSide(
-        color: AlcMobileColors.redAlert,
-        width: 1, 
-      ),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.0),
-      borderSide: const BorderSide(
-        color: AlcMobileColors.primary,
-        width: 1
-      ),
-    ),
-    fillColor: Colors.transparent,
-    filled: true,
-    floatingLabelBehavior: FloatingLabelBehavior.never,
-    isCollapsed: false,
-    isDense: false,
-  ) */
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: AlcMobileColors.primary,
     shape: CircleBorder(),
   ),
   bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: Colors.white
-  )
+  ),
+  checkboxTheme: CheckboxThemeData(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+    ),
+  ),
 );

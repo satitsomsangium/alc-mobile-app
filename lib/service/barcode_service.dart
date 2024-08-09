@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:alc_mobile_app/component/my_alert_dialog.dart';
+import 'package:alc_mobile_app/service/barcode/barcode_scanner_page.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
@@ -28,7 +32,7 @@ class BarcodeService extends GetxController {
     } on PlatformException {
       MyAlertDialog.showDefaultDialog(
         title: 'เกิดข้อผิดพลาด',
-        content: 'ไม่สามารถสแกน ${scanMode != ScanMode.QR ? 'barcode' : 'qr code'} ได้'
+        content: 'ไม่สามารถสแกน ${scanMode != ScanMode.QR ? 'barcode' : 'qr code'} ได้ กรุณาลองอีกครั้ง'
       );
     }
     return null;
@@ -36,6 +40,28 @@ class BarcodeService extends GetxController {
 
   static Future<void> playBarcodeSound() async {
     await audioPlayer.play(AssetSource('audio/barcodesound.mp3'));
+  }
+
+  static Future<String?> scanAndConvertV2() async {
+    try {
+      final result = await Navigator.push(
+        Get.context!,
+        MaterialPageRoute(builder: (context) => const BarcodeScannerPage()),
+      );
+      if (result != null) {
+        String finalArt = convertToArticle(result);
+        if (int.tryParse(finalArt) != null && int.parse(finalArt) >= 0) {
+          await playBarcodeSound();
+          return finalArt;
+        }
+      }
+    } catch (e) {
+      MyAlertDialog.showDefaultDialog(
+        title: 'เกิดข้อผิดพลาด',
+        content: 'ไม่สามารถสแกนบาร์โค้ดได้ กรุณาลองอีกครั้ง'
+      );
+    }
+    return null;
   }
 
   static String convertToArticle(String barcode) {

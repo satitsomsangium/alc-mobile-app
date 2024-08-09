@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AlcMobileButton extends StatefulWidget {
   final VoidCallback onPressed;
+  final VoidCallback? onLongPressed;
   final String text;
   final bool enable;
   final MaterialColor? color;
-  const AlcMobileButton({super.key, required this.text, required this. onPressed, this.color, this.enable = true });
+  final Size size;
+  const AlcMobileButton({
+    super.key, 
+    required this.text, 
+    required this.onPressed, 
+    this.onLongPressed,
+    this.color, 
+    this.enable = true,
+    this.size = const Size(70, 50)
+  });
 
   @override
   State<AlcMobileButton> createState() => _AlcMobileButtonState();
@@ -19,9 +30,11 @@ class _AlcMobileButtonState extends State<AlcMobileButton> {
       child: ElevatedButton(
         style: ButtonStyle(
           backgroundColor: WidgetStateProperty.all<Color>(widget.color ?? Colors.red),
-          elevation: WidgetStateProperty.all(0)
+          elevation: WidgetStateProperty.all(0),
+          minimumSize: WidgetStateProperty.all(Size(widget.size.width.w, widget.size.height.w))
         ),
         onPressed: widget.enable ? widget.onPressed : null,
+        onLongPress: widget.onLongPressed,
         child: Text(widget.text)
       ),
     );

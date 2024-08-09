@@ -1,3 +1,5 @@
+import 'package:alc_mobile_app/component/barcode_input.dart';
+import 'package:alc_mobile_app/component/button.dart';
 import 'package:alc_mobile_app/component/my_alert_dialog.dart';
 import 'package:alc_mobile_app/controller/db_controller.dart';
 import 'package:alc_mobile_app/controller/flow_controller.dart';
@@ -69,7 +71,7 @@ class StockCountDataPage extends StatelessWidget {
         spacing: 16.0,
         runSpacing: 16.0,
         children: [
-          ElevatedButton(
+          AlcMobileButton(
             onPressed: () {
               if (bayStatus == BayStatus.bayClose) {
                 MyAlertDialog.showDefaultDialog(
@@ -101,9 +103,9 @@ class StockCountDataPage extends StatelessWidget {
                 );
               }
             },
-            child: Text(bayStatus == BayStatus.bayClose ? 'นับเพิ่ม' : 'ปิดเบย์'),
+            text: bayStatus == BayStatus.bayClose ? 'นับเพิ่ม' : 'ปิดเบย์',
           ),
-          ElevatedButton(
+          AlcMobileButton(
             onPressed: () {
               MyAlertDialog.showDefaultDialog(
                 title: 'ยกเลิกเบย์',
@@ -119,18 +121,16 @@ class StockCountDataPage extends StatelessWidget {
                 }
               );
             },
-            child: const Text('ยกเลิกเบย์'),
+            text: 'ยกเลิกเบย์',
           ),
           Visibility(
             visible: bayStatus == BayStatus.bayClose,
-            child: ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all<Color>(Colors.green.shade300)
-              ),
+            child: AlcMobileButton(
+              color: Colors.green,
               onPressed: () {
                 Get.to(BarcodeGeneratorsPage(aisle, bay, div));
               }, 
-              child: const Text('มุมมองบาร์โคด')
+              text: 'มุมมองบาร์โคด'
             ),
           )
         ],
@@ -325,23 +325,23 @@ class _InputArticlePanelState extends State<InputArticlePanel> {
     return Visibility(
       visible: isShowPreviewProductDetail,
       child: Container(
-        color: Colors.white,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          border: Border(top: BorderSide(color: Colors.black12, width: 0.5)),
+        ),
         child: ListTile(
           title: Text(productMain?.art ?? ''),
           subtitle: Text(productMain?.descr ?? ''),
           trailing: Visibility(
             visible: isShowSaveButton,
-            child: ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all<Color>(Colors.green.shade300),
-                elevation: WidgetStateProperty.all(1)
-              ),
+            child: AlcMobileButton(
+              color: Colors.green,
               onPressed: () async {
                 BayData? articleData = await DbController.findArtInBayDataList(widget.aisle, widget.bay, widget.div, productMain?.art ?? '');
                 double qty = articleData != null ? articleData.qty : 0;
                 editQtyDialog(Get.context, productMain?.art ?? '', productMain?.descr ?? '', qty);
               },
-              child: const Text('ใ่ส่จำนวน'),
+              text: 'ใ่ส่จำนวน',
             ),
           ),
         ),
@@ -354,74 +354,17 @@ class _InputArticlePanelState extends State<InputArticlePanel> {
       bool isBayClose = FlowController.bayStatus.value != BayStatus.bayClose;
       return Visibility(
         visible: isBayClose,
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            border: Border(
-              bottom: BorderSide(color: Colors.black12, width: 0.3),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 4,
-                spreadRadius: 2,
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.only(top: 10, right: 15, bottom: 10, left: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                child: TextField(
-                  style: const TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w700),
-                  textAlign: TextAlign.center,
-                  maxLength: 14,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.all(8),
-                    isDense: true,
-                    counterText: "",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(75),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Colors.grey[800],
-                    hintText: "สแกนหรือพิมพ์รหัสสินค้า",
-                    hintStyle: const TextStyle(
-                        fontWeight: FontWeight.w700, color: Colors.white60),
-                  ),
-                  controller: stockCountController,
-                  onChanged: (value) {
-                    if (stockCountController.text.isNotEmpty) {
-                      loadPrevieDataPanel(value);
-                    }
-                  },
-                ),
-              ),
-              const SizedBox(width: 10),
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(100)),
-                width: 40,
-                height: 40,
-                padding: const EdgeInsets.all(0),
-                margin: const EdgeInsets.all(0),
-                child: IconButton(
-                  color: Colors.white,
-                  onPressed: scanBarcodeNormal,
-                  icon: const Icon(
-                    Icons.add,
-                    size: 25,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
-          ),
+        child: BarcodeInput(
+          onPressedBuntton: (String? barcode) {
+            if(barcode != null) {
+              loadPrevieDataPanel(barcode);
+            }
+          },
+          onInputChange: (String value) {
+            if (value.isNotEmpty) {
+              loadPrevieDataPanel(value);
+            }
+          },
         ),
       );
     });
@@ -578,14 +521,14 @@ class _InputArticlePanelState extends State<InputArticlePanel> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
+                AlcMobileButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('ยกเลิก'),
+                  text: 'ยกเลิก',
                 ),
                 const SizedBox(width: 10),
-                ElevatedButton(
+                AlcMobileButton(
                   onPressed: () async {
                     if (editQtyController.text.isEmpty) {
                       MyAlertDialog.checkqtyDialog(context, 'จำนวนต้องไม่เว้นว่าง');
@@ -640,7 +583,7 @@ class _InputArticlePanelState extends State<InputArticlePanel> {
                       Get.back();
                     }
                   },
-                  child: const Text('บันทึก'),
+                  text: 'บันทึก',
                 ),
               ],
             )
