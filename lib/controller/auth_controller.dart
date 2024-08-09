@@ -1,4 +1,4 @@
-/* import 'dart:async';
+import 'dart:async';
 import 'dart:io';
 
 import 'package:alc_mobile_app/component/button.dart';
@@ -477,4 +477,4 @@ class AuthController extends GetxController {
       content: message
     );
   }
-} */
+}
